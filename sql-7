@@ -1,0 +1,52 @@
+SELECT c.name AS category_name, COUNT(f.film_id) AS film_count
+FROM category c
+JOIN film_category fc ON c.category_id = fc.category_id
+JOIN film f ON fc.film_id = f.film_id
+GROUP BY c.category_id, c.name;
+#Display the total amount rung up by each staff member in August of 2005.
+SELECT staff_id, SUM(amount) AS total_amount
+FROM payment
+WHERE EXTRACT(YEAR_MONTH FROM payment_date) = '200508'
+GROUP BY staff_id;
+#Which actor has appeared in the most films?
+SELECT actor_id, COUNT(fa.film_id) AS film_count
+FROM actor a
+JOIN film_actor fa ON a.actor_id = fa.actor_id
+GROUP BY actor_id
+ORDER BY film_count DESC
+LIMIT 1;
+
+#Most active customer (the customer that has rented the most number of films)
+SELECT customer_id, COUNT(rental_id) AS rental_count
+FROM rental
+GROUP BY customer_id
+ORDER BY rental_count DESC
+LIMIT 1;
+
+#Display the first and last names, as well as the address, of each staff member.
+SELECT staff_id, first_name, last_name 
+FROM staff;
+
+#List each film and the number of actors who are listed for that film.
+SELECT f.title, COUNT(fa.actor_id) AS actor_count
+FROM film f
+JOIN film_actor fa ON f.film_id = fa.film_id
+GROUP BY f.film_id, f.title;
+
+#Using the tables payment and customer and the JOIN command, list the total paid by each customer. 
+SELECT c.customer_id, c.last_name, c.first_name, SUM(p.amount) AS total_paid
+FROM customer c
+JOIN payment p ON c.customer_id = p.customer_id
+GROUP BY c.customer_id, c.last_name, c.first_name
+ORDER BY c.last_name, c.first_name;
+
+#List the titles of films per category.
+SELECT c.name AS category_name, GROUP_CONCAT(f.title) AS film_titles
+FROM category c
+JOIN film_category fc ON c.category_id = fc.category_id
+JOIN film f ON fc.film_id = f.film_id
+GROUP BY c.category_id, c.name;
+
+
+
+
